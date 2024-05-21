@@ -17,6 +17,9 @@ public class HomePage
 	@FindBy(linkText="Organizations")
 	private WebElement orgLink;
 	
+	@FindBy(linkText="Products")
+	private WebElement prdLink;
+	
 	@FindBy(linkText="Contacts")
 	private WebElement contactLink;
 	
@@ -34,6 +37,11 @@ public class HomePage
 		return contactLink;
 	}
 	
+	
+	public WebElement getPrdLink() {
+		return prdLink;
+	}
+
 	public void logout()
 	{
 		Actions action= new Actions(driver);
