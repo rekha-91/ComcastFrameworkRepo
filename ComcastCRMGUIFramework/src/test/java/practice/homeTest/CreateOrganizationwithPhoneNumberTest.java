@@ -1,6 +1,7 @@
-package com.comcast.crm.orgtest;
+package practice.homeTest;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.util.Properties;
 import java.util.Random;
@@ -12,14 +13,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 
-public class CreateOrgWithIndustryTest
+public class CreateOrganizationwithPhoneNumberTest 
 {
 	public static void main(String[] args) throws Throwable {
 		//reading data from property file
@@ -38,13 +37,12 @@ public class CreateOrgWithIndustryTest
 				 FileInputStream fis1= new FileInputStream("./testData/TestScriptData_01.xlsx");
 				 Workbook wb= WorkbookFactory.create(fis1);
 				 Sheet sheet = wb.getSheet("org");
-				 Row row = sheet.getRow(4);
+				 Row row = sheet.getRow(7);
 				 Cell cell = row.getCell(2);
-				 Cell cellind = row.getCell(3);
-				 Cell cellType = row.getCell(4);
+				
 				 String OrgName = cell.getStringCellValue() + randomInt;
-				 String IndName = cellind.getStringCellValue();
-				 String TypeName= cellType.getStringCellValue();
+				 String Phoneno = row.getCell(3).toString();
+				 
 				 WebDriver driver= null;
 				 
 				 if(BROWSER.equals("chrome"))
@@ -79,58 +77,21 @@ public class CreateOrgWithIndustryTest
 				 
 				 //step4: Enter all the details & create new organization
 				 driver.findElement(By.name("accountname")).sendKeys(OrgName);
-				WebElement IndustrySelect= driver.findElement(By.name("industry"));
-				 Select sl1= new Select(IndustrySelect);
-				 sl1.selectByValue(IndName);
-				 
-				 WebElement TypeSelect = driver.findElement(By.name("accounttype"));
-				 Select sl2= new Select(TypeSelect);
-				 sl2.selectByValue(TypeName);
-				 
+				 driver.findElement(By.id("phone")).sendKeys(Phoneno);
 				 driver.findElement(By.xpath("//input[@title='Save [Alt+S]']")).click();
 				 
-				 //verify header msg expected result
-				String headerInfo = driver.findElement(By.xpath("//span[@class='dvHeaderText']")).getText();
-				if(headerInfo.contains(OrgName))
-				{
-					System.out.println(OrgName+" is verified==pass");
-				}
-				else
-				{
-					System.out.println(OrgName+" is not verified==fail");
-				}
-				 //verify the header organization name info expected result
-				String actualOrgName = driver.findElement(By.id("dtlview_Organization Name")).getText();
-				if(actualOrgName.equals(OrgName))
-				{
-					System.out.println(OrgName+" is verified==pass");
-				}
-				else
-				{
-					System.out.println(OrgName+" is not verified==fail");
-				}
 				
-				//verify the drop down industry name info expected result
-				String actualIndustryName = driver.findElement(By.id("dtlview_Industry")).getText();
-				if(actualIndustryName.equals(IndName))
+				 //verify the phone number info expected result
+				String actuaPhoneNum = driver.findElement(By.id("dtlview_Phone")).getText();
+				if(actuaPhoneNum.equals(Phoneno))
 				{
-					System.out.println(IndName+" is verified==pass");
+					System.out.println(Phoneno+" is created==pass");
 				}
 				else
 				{
-					System.out.println(IndName+" is not verified==fail");
+					System.out.println(Phoneno+" is not created==fail");
 				}
-				
-				//verify the drop down industryType name info expected result
-				String actualIndustryTypeName = driver.findElement(By.id("dtlview_Type")).getText();
-				if(actualIndustryTypeName.equals(TypeName))
-				{
-					System.out.println(TypeName+" is verified==pass");
-				}
-				else
-				{
-					System.out.println(TypeName+" is not verified==fail");
-				}
+				  
 				 //step5: logout 
 				 Actions action= new Actions(driver);
 				 action.moveToElement(driver.findElement(By.xpath("//img[@src='themes/softed/images/user.PNG']"))).perform();

@@ -1,4 +1,4 @@
-package com.comcast.crm.contacttest;
+package practice.contactTest;
 
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
@@ -21,14 +21,12 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import com.comcast.crm.generic.webdriverutility.JavaUtility;
-
 public class CreateContactWithSupportDateTest
 {
 	public static void main(String[] args) throws Throwable 
 	{
 		//reading data from property file
-		FileInputStream fis= new FileInputStream("./configAppData/commondata.properties");
+		FileInputStream fis= new FileInputStream("C:\\Users\\REKHA GUPTA\\OneDrive\\Desktop\\test_data\\commondata.properties");
 		Properties pobj= new Properties();
 		pobj.load(fis);
 		 String BROWSER= pobj.getProperty("browser");
@@ -36,15 +34,16 @@ public class CreateContactWithSupportDateTest
 		 String USERNAME= pobj.getProperty("username");
 		 String PASSWORD= pobj.getProperty("password");
 		 
-		JavaUtility jlib= new JavaUtility();
+		 Random random= new Random();
+		 int randomInt = random.nextInt(1000);
 		
 		 //reading data from workbook
-		 FileInputStream fis1= new FileInputStream("./testData/TestScriptData_01.xlsx");
+		 FileInputStream fis1= new FileInputStream("C:\\Users\\REKHA GUPTA\\OneDrive\\Desktop\\test_data\\TestScriptData_01.xlsx");
 		 Workbook wb= WorkbookFactory.create(fis1);
 		 Sheet sheet = wb.getSheet("Contact");
 		 Row row = sheet.getRow(1);
 		 Cell cell = row.getCell(2);
-		 String LastName = cell.getStringCellValue() + jlib.getRandomNumber();
+		 String LastName = cell.getStringCellValue() + randomInt;
 		 
 		 WebDriver driver= null;
 		 
@@ -80,41 +79,46 @@ public class CreateContactWithSupportDateTest
 		 
 		 //step4: Enter all the details & create new contacts
 		 
-		String startDate= jlib.getSystemDateYYYYMMDD();
-		String endDate= jlib.getRequiredDateYYYYMMDD(30);
+		 Date dateobj= new Date();
+			SimpleDateFormat sim= new SimpleDateFormat("yyyy-MM-dd");
+			String StartDate = sim.format(dateobj);
+
+			Calendar calender = sim.getCalendar();
+			calender.add(Calendar.DAY_OF_MONTH, 30);
+			String EndDate = sim.format(calender.getTime());
 			
 		 driver.findElement(By.name("lastname")).sendKeys(LastName);
 		WebElement StartDateTF = driver.findElement(By.name("support_start_date"));
 		Actions action= new Actions(driver);
 		action.moveToElement(StartDateTF).perform();
 		StartDateTF.clear();
-		StartDateTF.sendKeys(startDate);
+		StartDateTF.sendKeys(StartDate);
 		WebElement EndDateTF = driver.findElement(By.name("support_end_date"));
 		EndDateTF.clear();
-		EndDateTF.sendKeys(endDate);
+		EndDateTF.sendKeys(EndDate);
 		
 		 driver.findElement(By.xpath("//input[@title='Save [Alt+S]']")).click();
 		 
 		
 		 //verify the phone number info expected result
 		 String StartDatecheck = driver.findElement(By.id("dtlview_Support Start Date")).getText();
-			if(StartDatecheck.equals(startDate))
+			if(StartDatecheck.equals(StartDate))
 			{
-				System.out.println(startDate+" is verified==pass");
+				System.out.println(StartDate+" is verified==pass");
 			}
 			else
 			{
-				System.out.println(startDate+" is not verified==fail");
+				System.out.println(StartDate+" is not verified==fail");
 			}
 			//verify the End Date info expected result
 					String EndDatecheck = driver.findElement(By.id("dtlview_Support End Date")).getText();
-					if(EndDatecheck.equals(endDate))
+					if(EndDatecheck.equals(EndDate))
 					{
-						System.out.println(endDate+" is verified==pass");
+						System.out.println(EndDate+" is verified==pass");
 					}
 					else
 					{
-						System.out.println(endDate+" is not verified==fail");
+						System.out.println(EndDate+" is not verified==fail");
 					}
 		  
 		 //step5: logout 

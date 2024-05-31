@@ -49,7 +49,8 @@ public class Base_Class
 	{
 		System.out.println("Launch the Browser");
 		//reading data from property file
-		 String BROWSER= flib.getDataFromPropertiesFile("browser");
+		// String BROWSER= flib.getDataFromPropertiesFile("browser");
+		String BROWSER= System.getProperty("browser",flib.getDataFromPropertiesFile("browser"));
 		 
 		 if(BROWSER.equals("chrome"))
 		 {
@@ -74,9 +75,12 @@ public class Base_Class
     public void configBM() throws Throwable
     {
     	System.out.println("Login");
-    	String URL= flib.getDataFromPropertiesFile("url");
-		 String USERNAME= flib.getDataFromPropertiesFile("username");
-		 String PASSWORD= flib.getDataFromPropertiesFile("password");
+    	//String URL= flib.getDataFromPropertiesFile("url");
+		// String USERNAME= flib.getDataFromPropertiesFile("username");
+		// String PASSWORD= flib.getDataFromPropertiesFile("password");
+    	String URL= System.getProperty("url",flib.getDataFromPropertiesFile("url"));
+    	String USERNAME= System.getProperty("username",flib.getDataFromPropertiesFile("username"));
+    	String PASSWORD= System.getProperty("password",flib.getDataFromPropertiesFile("password"));
 		 LoginPage lp= new LoginPage(driver);
 		 lp.loginToApp(URL, USERNAME, PASSWORD);
     }
