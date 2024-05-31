@@ -135,7 +135,7 @@ public class CreateContactCRMTest extends Base_Class {
 
 		// Switch to parent window
 		Set<String> set1 = driver.getWindowHandles();
-		Iterator<String> it1 = set.iterator();
+		Iterator<String> it1 = set1.iterator();
 		while (it1.hasNext()) {
 			String windowID = it1.next();
 			driver.switchTo().window(windowID);
